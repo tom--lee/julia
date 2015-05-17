@@ -52,7 +52,16 @@ end
 
 # general machinery for parsing REQUIRE files
 
-function read(readable::Union{IO,Base.AbstractCmd})
+function read{T<:AbstractString}(readable::Vector{T})
+    lines = Line[]
+    for line in readable
+        line = chomp(line)
+        push!(lines, ismatch(r"^\s*(?:#|$)", line) ? Comment(line) : Requirement(line))
+    end
+    return lines
+end
+
+function read(readable::Union(IO,Base.AbstractCmd))
     lines = Line[]
     for line in eachline(readable)
         line = chomp(line)
