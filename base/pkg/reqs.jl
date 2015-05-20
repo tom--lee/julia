@@ -2,7 +2,7 @@
 
 module Reqs
 
-import Pkg.PkgError
+import ...Pkg.PkgError
 using ..Types
 
 # representing lines of REQUIRE files
