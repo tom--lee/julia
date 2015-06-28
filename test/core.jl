@@ -3051,12 +3051,16 @@ end
 immutable Foo11874
    x::Int
 end
-
 function bar11874(x)
    y::Foo11874
    y=x
 end
-
 Base.convert(::Type{Foo11874},x::Int) = float(x)
-
 @test_throws TypeError bar11874(1)
+
+module TestCostStructCreate
+const x = (1,2)
+const y = (x,(3,4))
+f() = (x,y,(5,6))
+@test f() == ((1,2),((1,2),(3,4)),(5,6))
+end
