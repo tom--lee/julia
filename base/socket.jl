@@ -349,7 +349,7 @@ _jl_sockaddr_set_port(ptr::Ptr{Void},port::UInt16) =
     ccall(:jl_sockaddr_set_port,Void,(Ptr{Void},UInt16),ptr,port)
 
 accept(server::TCPServer) = accept(server, TCPSocket())
-accept(server::PipeServer) = accept(server, Pipe())
+accept(server::PipeServer) = accept(server, init_pipe!(Pipe(); readable=true, writable=true, julia_only=true))
 
 ##
 
