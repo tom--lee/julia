@@ -3058,9 +3058,9 @@ end
 Base.convert(::Type{Foo11874},x::Int) = float(x)
 @test_throws TypeError bar11874(1)
 
-module TestCostStructCreate
+module TestRecursiveConstGlobalStructCtor
 const x = (1,2)
 const y = (x,(3,4))
 f() = (x,y,(5,6))
-@test f() == ((1,2),((1,2),(3,4)),(5,6))
 end
+@test TestRecursiveConstGlobalStructCtor.f() == ((1,2),((1,2),(3,4)),(5,6))
