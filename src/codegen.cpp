@@ -2006,7 +2006,7 @@ static jl_cgval_t emit_getfield(jl_value_t *expr, jl_sym_t *name, jl_codectx_t *
         expr = static_val;
 
     if (jl_is_module(expr)) {
-        jl_binding_t *jbp;
+        jl_binding_t *jbp = NULL;
         Value *bp = global_binding_pointer((jl_module_t*)expr, name, &jbp, false, ctx);
         if (jbp && jbp->value && jbp->constp) {
             if (jbp->constp) {
