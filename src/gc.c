@@ -39,6 +39,7 @@ extern "C" {
 #define jl_valueof(v) (&((jl_taggedvalue_t*)(v))->value)
 
 int jl_in_gc; // referenced from switchto task.c
+static int jl_gc_finalizers_inhibited; // don't run finalizers during codegen #11956
 
 // This struct must be kept in sync with the Julia type of the same name in base/util.jl
 typedef struct {
@@ -156,6 +157,16 @@ static void run_finalizers(void)
         run_finalizer((jl_value_t*)o, (jl_value_t*)f);
     }
     JL_GC_POP();
+}
+
+void jl_gc_inhibit_finalizers(int state)
+{
+    if (jl_gc_finalizers_inhibited && !state && !jl_in_gc) {
+        jl_in_gc = 1;
+        run_finalizers();
+        jl_in_gc = 0;
+    }
+    jl_gc_finalizers_inhibited = state;
 }
 
 static void schedule_all_finalizers(arraylist_t* flist)
@@ -2352,7 +2363,9 @@ void jl_gc_collect(int full)
 #if defined(GC_FINAL_STATS) || defined(GC_TIME)
             finalize_time = jl_hrtime();
 #endif
-            run_finalizers();
+            if (!jl_gc_finalizers_inhibited) {
+                run_finalizers();
+            }
 #if defined(GC_FINAL_STATS) || defined(GC_TIME)
             finalize_time = jl_hrtime() - finalize_time;
 #endif

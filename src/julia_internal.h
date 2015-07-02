@@ -43,6 +43,7 @@ STATIC_INLINE jl_value_t *newstruct(jl_datatype_t *type)
 // MSVC miscalculates sizeof(jl_taggedvalue_t) because
 // empty structs are a GNU extension
 #define sizeof_jl_taggedvalue_t (sizeof(void*))
+void jl_gc_inhibit_finalizers(int state);
 
 int jl_assign_type_uid(void);
 jl_value_t *jl_cache_type_(jl_datatype_t *type);
