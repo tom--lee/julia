@@ -230,7 +230,7 @@ type ProcessGroup
     # global references
     refs::Dict
 
-    ProcessGroup(w::Array{Any,1}) = new("pg-default", w, Dict(), Dict())
+    ProcessGroup(w::Array{Any,1}) = new("pg-default", w, Dict())
 end
 const PGRP = ProcessGroup([])
 
@@ -1213,7 +1213,7 @@ end
 # Called on the first worker on a remote host. Used to optimize launching
 # of multiple workers on a remote host (to leverage multi-core)
 
-additional_io_objs=Dict()
+const additional_io_objs=Dict()
 function launch_additional(np::Integer, cmd::Cmd)
     io_objs = cell(np)
     addresses = cell(np)

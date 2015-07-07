@@ -60,7 +60,7 @@ function Channel(T::Type, sz::Int)
     end
 end
 
-map_all_channels = Dict{Int, AbstractChannel}()
+const map_all_channels = Dict{Int, AbstractChannel}()
 register_channel(c::Channel) = (map_all_channels[c.cid] = c; ChannelAddr(myid(), c.cid))
 create_and_register_channel(T::Type, sz::Int) = register_channel(Channel(T, sz))
 
