@@ -634,3 +634,15 @@ end
 
 @deprecate mmap_bitarray{N}(::Type{Bool}, dims::NTuple{N,Integer}, s::IOStream, offset::FileOffset=position(s)) mmap(s, BitArray, dims, offset)
 @deprecate mmap_bitarray{N}(dims::NTuple{N,Integer}, s::IOStream, offset=position(s)) mmap(s, BitArray, dims, offset)
+
+function require(mod::AbstractString)
+    depwarn("`require` is deprecated, use `using` or `import` instead", :require)
+    Base.require(symbol(mod))
+end
+function require(f::AbstractString, fs::AbstractString...)
+    require(f)
+    for fn in fs
+        require(fn)
+    end
+end
+export require
